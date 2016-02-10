@@ -21,6 +21,8 @@
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
 #include <boost/detail/workaround.hpp>
+#include <boost/integer.hpp>
+#include <cstdlib> // for abs()
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -79,49 +81,29 @@ public:
 namespace detail
 {
     // Greatest common divisor for rings (including unsigned integers)
-    template < typename RingType >
-    RingType
-    gcd_euclidean
-    (
-        RingType a,
-        RingType b
-    )
+    template <typename RingType>
+    RingType gcd_euclidean(RingType u, RingType v)
     {
-        // Avoid repeated construction
-        #ifndef __BORLANDC__
-        RingType const  zero = static_cast<RingType>( 0 );
-        #else
-        RingType  zero = static_cast<RingType>( 0 );
-        #endif
+        RingType const zero = static_cast<RingType>(0);
 
         // Reduce by GCD-remainder property [GCD(a,b) == GCD(b,a MOD b)]
-        while ( true )
+        while (v != zero)
         {
-            if ( a == zero )
-                return b;
-            b %= a;
-
-            if ( b == zero )
-                return a;
-            a %= b;
+            RingType const r = u % v;
+            u = v;
+            v = r;
         }
+        
+        return u;
     }
 
     // Greatest common divisor for (signed) integers
-    template < typename IntegerType >
+    template <typename IntegerType>
     inline
-    IntegerType
-    gcd_integer
-    (
-        IntegerType const &  a,
-        IntegerType const &  b
-    )
+    IntegerType gcd_integer(IntegerType const &a, IntegerType const &b)
     {
-        // Avoid repeated construction
-        IntegerType const  zero = static_cast<IntegerType>( 0 );
-        IntegerType const  result = gcd_euclidean( a, b );
-
-        return ( result < zero ) ? static_cast<IntegerType>(-result) : result;
+        typedef BOOST_DEDUCED_TYPENAME boost::uint_t<sizeof(IntegerType) * 8>::fast UIntType;
+        return gcd_euclidean(static_cast<UIntType>(std::abs(a)), static_cast<UIntType>(std::abs(b)));
     }
 
     // Greatest common divisor for unsigned binary integers
