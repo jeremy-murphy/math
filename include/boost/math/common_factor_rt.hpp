@@ -84,8 +84,8 @@ namespace detail
     template <typename RingType>
     RingType gcd_euclidean(RingType u, RingType v)
     {
-        RingType const zero = static_cast<RingType>(0);
-
+        RingType const zero(0);
+        
         // Reduce by GCD-remainder property [GCD(a,b) == GCD(b,a MOD b)]
         while (v != zero)
         {
@@ -102,8 +102,7 @@ namespace detail
     inline
     IntegerType gcd_integer(IntegerType const &a, IntegerType const &b)
     {
-        typedef BOOST_DEDUCED_TYPENAME boost::uint_t<sizeof(IntegerType) * 8>::fast UIntType;
-        return gcd_euclidean(static_cast<UIntType>(std::abs(a)), static_cast<UIntType>(std::abs(b)));
+        return gcd_euclidean(static_cast<IntegerType>(abs(a)), static_cast<IntegerType>(abs(b)));
     }
 
     // Greatest common divisor for unsigned binary integers
