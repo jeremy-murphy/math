@@ -21,8 +21,6 @@
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
 #include <boost/detail/workaround.hpp>
-#include <boost/integer.hpp>
-#include <cstdlib> // for abs()
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
