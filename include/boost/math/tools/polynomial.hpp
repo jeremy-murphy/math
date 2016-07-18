@@ -728,8 +728,7 @@ T constant_coefficient(polynomial<T> const &x)
 template <class T>
 T leading_coefficient(polynomial<T> const &x)
 {
-    BOOST_ASSERT(x);
-    return x.data().back();
+    return x ? x.data().back() : T(0);
 }
 
 } // namespace tools
