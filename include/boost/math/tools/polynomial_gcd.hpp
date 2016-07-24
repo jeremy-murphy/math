@@ -243,11 +243,16 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
         if (r.degree() == 0)
             return d * polynomial<T>(T(1)); // The content is the result.
         N const delta = u.degree() - v.degree();
+        BOOST_ASSERT(delta < u.degree());
         // Adjust remainder.
         u = v;
-        v = r / (g * detail::integer_power(h, delta));
+        BOOST_ASSERT(g && h);
+        auto const ghd = g * detail::integer_power(h, delta);
+        v = r / ghd;
+        BOOST_ASSERT(v);
         g = leading_coefficient(u);
         T const tmp = detail::integer_power(g, delta);
+        BOOST_ASSERT(tmp);
         if (delta <= N(1))
             h = tmp * detail::integer_power(h, N(1) - delta);
         else
