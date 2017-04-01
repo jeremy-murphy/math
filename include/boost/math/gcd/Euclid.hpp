@@ -23,7 +23,8 @@ namespace boost { namespace math {
      * positional notation.
      * 
      * This implementation is taken from FM2GP (www.fm2gp.com):
-     *  Alexander A. Stepanov and Daniel E. Rose. 2014. From Mathematics to Generic Programming (1st ed.). Addison-Wesley Professional.
+     *  Alexander A. Stepanov and Daniel E. Rose. 2014. From Mathematics to 
+     *  Generic Programming (1st ed.). Addison-Wesley Professional.
      */
     template <typename EuclideanDomain>
     inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
@@ -37,14 +38,14 @@ namespace boost { namespace math {
         return a;
     }
     
-    template <typename EuclideanDomain, typename ModuloAssignment>
-    inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b, ModuloAssignment m)
+    template <typename EuclideanDomain, typename BinaryRelation, typename CompoundAssignment>
+    inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b, BinaryRelation not_equal_to, CompoundAssignment modulo)
     {
         using std::swap;
-        while (b != EuclideanDomain(0))
+        while (not_equal_to(b, EuclideanDomain(0)))
         {
-            m(a, b);
-            swap(a, b);
+            modulo(a, b);
+            swap(a, b); // Make swap a parameter or rely on ADL?
         }
         return a;
     }
