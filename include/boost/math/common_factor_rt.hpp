@@ -11,6 +11,7 @@
 #include <boost/core/enable_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/math/gcd/Euclid.hpp>
 
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
@@ -324,24 +325,6 @@ namespace detail
     }
 
     
-    /** Euclidean algorithm
-     * 
-     * From Mathematics to Generic Programming, Alexander Stepanov, Daniel Rose
-     * 
-     */
-    template <typename EuclideanDomain>
-    inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
-    {
-        using std::swap;
-        while (b != EuclideanDomain(0))
-        {
-            a %= b;
-            swap(a, b);
-        }
-        return a;
-    }
-
-
     template <typename T>
     inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == gcd_traits<T>::method_mixed, T>::type
        optimal_gcd_select(T const &a, T const &b)
@@ -360,7 +343,7 @@ namespace detail
     inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == gcd_traits<T>::method_euclid, T>::type
        optimal_gcd_select(T const &a, T const &b)
     {
-       return detail::Euclid_gcd(a, b);
+       return Euclid_gcd(a, b);
     }
 
     template <class T>
