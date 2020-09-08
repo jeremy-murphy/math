@@ -74,22 +74,16 @@ void interval_sieve(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-// Complete Implementations
-template<class ExecuitionPolicy, class Integer, class Container>
-inline auto prime_sieve_helper(ExecuitionPolicy policy, Integer upper, Container primes)
-{
-    boost::math::prime_sieve(policy, upper, primes);
-    return primes;
-}
-
 template <class Integer>
 void prime_sieve(benchmark::State& state)
 {
     Integer upper = static_cast<Integer>(state.range(0));
+    std::vector<Integer> primes;
+
     for(auto _ : state)
     {
-        std::vector<Integer> primes;
-        benchmark::DoNotOptimize(prime_sieve_helper(std::execution::par, upper, primes));
+        primes.clear();
+        boost::math::prime_sieve(std::execution::par, upper, primes);
     }
     state.SetComplexityN(state.range(0));
 }
