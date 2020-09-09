@@ -41,7 +41,6 @@ namespace detail
 template<class Integer, class OutputIterator>
 OutputIterator linear_sieve(Integer upper_bound, OutputIterator resultant_primes)
 {
-    auto const first = resultant_primes;
     auto const least_divisors_size = upper_bound + 1;
     std::unique_ptr<Integer[]> least_divisors{new Integer[least_divisors_size]{0}};
 
@@ -53,7 +52,7 @@ OutputIterator linear_sieve(Integer upper_bound, OutputIterator resultant_primes
             *resultant_primes++ = i;
         }
 
-        for (Integer j = 0; j < resultant_primes - first
+        for (Integer j = 0; j < i - 1
                             && i * resultant_primes[j] <= upper_bound
                             && resultant_primes[j] <= least_divisors[i]
                             && j < least_divisors_size;                     ++j)
